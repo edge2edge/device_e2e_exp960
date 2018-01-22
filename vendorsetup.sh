@@ -1,0 +1,3 @@
+add_lunch_combo exp960-user
+add_lunch_combo exp960-userdebug
+add_lunch_combo exp960-eng
