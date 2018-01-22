@@ -1,0 +1,77 @@
+# Primary Arch
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+
+# Secondary Arch
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv8-a
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+
+TARGET_USES_64_BIT_BINDER := true
+TARGET_SUPPORTS_32_BIT_APPS := true
+TARGET_SUPPORTS_64_BIT_APPS := true
+
+WITH_DEXPREOPT ?= true
+USE_OPENGL_RENDERER := true
+
+# BT configs
+BOARD_HAVE_BLUETOOTH := true
+
+# generic wifi
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_HOSTAPD_DRIVER := NL80211
+
+TARGET_NO_BOOTLOADER := true
+TARGET_NO_KERNEL := false
+TARGET_NO_RECOVERY := true
+TARGET_HARDWARE_3D := true
+BOARD_USES_GENERIC_AUDIO := true
+USE_CAMERA_STUB := true
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+TARGET_USE_PAN_DISPLAY := true
+
+TARGET_USES_HWC2 := true
+SF_START_GRAPHICS_ALLOCATOR_SERVICE := true
+
+TARGET_AUX_OS_VARIANT_LIST := neonkey argonkey
+
+BOARD_SEPOLICY_DIRS += device/e2e/exp960/sepolicy
+BOARD_SEPOLICY_DIRS += system/bt/vendor_libs/linux/sepolicy
+
+DEVICE_MANIFEST_FILE := device/e2e/exp960/manifest.xml
+DEVICE_MATRIX_FILE := device/e2e/exp960/compatibility_matrix.xml
+
+ifneq ($(TARGET_SENSOR_MEZZANINE),)
+DEVICE_MANIFEST_FILE += device/e2e/exp960/sensorhal/manifest.xml
+DEVICE_MANIFEST_FILE += device/e2e/exp960/vr/manifest.xml
+endif
+
+ifeq ($(HOST_OS), linux)
+ifeq ($(TARGET_SYSTEMIMAGES_USE_SQUASHFS), true)
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := squashfs
+endif
+endif
+
+TARGET_BOOTLOADER_BOARD_NAME := exp960
+TARGET_BOARD_PLATFORM := exp960
+
+TARGET_CPU_VARIANT := cortex-a73
+TARGET_2ND_CPU_VARIANT := cortex-a73
+
+TARGET_NO_DTIMAGE := false
+
+BOARD_KERNEL_CMDLINE := androidboot.hardware=exp960 console=ttyFIQ0 androidboot.console=ttyFIQ0
+BOARD_KERNEL_CMDLINE += firmware_class.path=/system/etc/firmware loglevel=15
+ifneq ($(TARGET_SENSOR_MEZZANINE),)
+BOARD_KERNEL_CMDLINE += overlay_mgr.overlay_dt_entry=hardware_cfg_$(TARGET_SENSOR_MEZZANINE)
+endif
+BOARD_MKBOOTIMG_ARGS := --base 0x0 --tags_offset 0x07a00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07c00000
+
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2768240640   # 2640MB
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 25769803776 # 24GB
+BOARD_CACHEIMAGE_PARTITION_SIZE := 8388608       # 8MB
+BOARD_FLASH_BLOCK_SIZE := 512
